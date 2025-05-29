@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Shield, Zap, Sun, Moon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -48,7 +47,7 @@ export const Header = () => {
                 isApiConnected ? 'bg-green-400 animate-pulse' : 'bg-red-400'
               }`}></div>
               <span className="text-sm text-gray-600 dark:text-gray-300">
-                {isApiConnected ? 'API Connected' : 'NO API CONNECTED'}
+                {isApiConnected ? 'API Connected' : 'No API Connected'}
               </span>
             </div>
             <Button

@@ -4,14 +4,15 @@ import { SystemPromptPanel } from '@/components/SystemPromptPanel';
 import { ChatInterface } from '@/components/ChatInterface';
 import { Card } from '@/components/ui/card';
 
-export const MainInterface = () => {
+interface MainInterfaceProps {
+  safeMode: boolean;
+  onStatsUpdate?: (stats: { totalMessages: number; attackCount: number; successfulAttacks: number }) => void;
+}
+
+export const MainInterface: React.FC<MainInterfaceProps> = ({ safeMode, onStatsUpdate }) => {
   const [systemPrompt, setSystemPrompt] = useState('');
   const [selectedTemplate, setSelectedTemplate] = useState('');
   const [chatInput, setChatInput] = useState('');
-
-  const handleAttackSelect = (prompt: string) => {
-    setChatInput(prompt);
-  };
 
   return (
     <div className="flex-1 p-4 space-y-4">
@@ -30,6 +31,8 @@ export const MainInterface = () => {
             systemPrompt={systemPrompt} 
             inputValue={chatInput}
             onInputChange={setChatInput}
+            safeMode={safeMode}
+            onStatsUpdate={onStatsUpdate}
           />
         </Card>
       </div>
