@@ -1,19 +1,17 @@
 
 import React, { useState } from 'react';
-import { ChevronDown, ChevronRight, Shield, AlertTriangle, Users, Code, Activity, Lock } from 'lucide-react';
+import { ChevronDown, ChevronRight, Shield, Code, Activity, Lock, Settings, AlertTriangle } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
-import { AttackLibrary } from '@/components/AttackLibrary';
 
 interface SidebarProps {
-  onAttackSelect?: (prompt: string) => void;
   safeMode: boolean;
   setSafeMode: (value: boolean) => void;
 }
 
-export const Sidebar: React.FC<SidebarProps> = ({ onAttackSelect, safeMode, setSafeMode }) => {
-  const [expandedSections, setExpandedSections] = useState<string[]>(['attacks']);
+export const Sidebar: React.FC<SidebarProps> = ({ safeMode, setSafeMode }) => {
+  const [expandedSections, setExpandedSections] = useState<string[]>(['defense']);
 
   const toggleSection = (section: string) => {
     setExpandedSections(prev => 
@@ -24,7 +22,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ onAttackSelect, safeMode, setS
   };
 
   return (
-    <div className="w-full lg:w-80 xl:w-96 bg-white/70 dark:bg-gray-900/70 backdrop-blur-xl border-r border-orange-200/50 dark:border-gray-700/50 p-6 space-y-6 overflow-y-auto h-full">
+    <div className="w-full h-full bg-white/70 dark:bg-gray-900/70 backdrop-blur-xl border-r border-orange-200/50 dark:border-gray-700/50 p-6 space-y-6 overflow-hidden hover:overflow-y-auto transition-all duration-300">
       {/* Safe Mode Toggle */}
       <Card className="relative overflow-hidden border-orange-200/50 dark:border-gray-700/50 bg-gradient-to-br from-orange-50/80 via-amber-50/60 to-orange-100/40 dark:from-orange-900/20 dark:via-amber-900/15 dark:to-orange-800/10 shadow-lg backdrop-blur-sm">
         <div className="absolute inset-0 bg-gradient-to-r from-orange-500/5 to-amber-500/5" />
@@ -61,26 +59,26 @@ export const Sidebar: React.FC<SidebarProps> = ({ onAttackSelect, safeMode, setS
         </div>
       </Card>
 
-      {/* Attack Library */}
+      {/* Security Info */}
       <Card className="border-orange-200/50 dark:border-gray-700/50 bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm shadow-lg">
-        <div className="p-4 border-b border-orange-100/50 dark:border-gray-700/50 bg-gradient-to-r from-red-50/50 to-orange-50/50 dark:from-red-900/10 dark:to-orange-900/10">
+        <div className="p-4 border-b border-orange-100/50 dark:border-gray-700/50 bg-gradient-to-r from-blue-50/50 to-indigo-50/50 dark:from-blue-900/10 dark:to-indigo-900/10">
           <button
-            onClick={() => toggleSection('attacks')}
+            onClick={() => toggleSection('info')}
             className="flex items-center justify-between w-full text-left group"
           >
             <div className="flex items-center space-x-3">
-              <div className="p-2 rounded-lg bg-gradient-to-br from-red-100 to-orange-100 dark:from-red-900/50 dark:to-orange-900/50 group-hover:from-red-200 group-hover:to-orange-200 dark:group-hover:from-red-800/70 dark:group-hover:to-orange-800/70 transition-all duration-300">
-                <AlertTriangle className="h-4 w-4 text-red-600 dark:text-red-400" />
+              <div className="p-2 rounded-lg bg-gradient-to-br from-blue-100 to-indigo-100 dark:from-blue-900/50 dark:to-indigo-900/50 group-hover:from-blue-200 group-hover:to-indigo-200 dark:group-hover:from-blue-800/70 dark:group-hover:to-indigo-800/70 transition-all duration-300">
+                <Settings className="h-4 w-4 text-blue-600 dark:text-blue-400" />
               </div>
               <div>
-                <h3 className="font-bold text-gray-900 dark:text-gray-100 group-hover:text-red-700 dark:group-hover:text-red-300 transition-colors">
-                  Attack Library
+                <h3 className="font-bold text-gray-900 dark:text-gray-100 group-hover:text-blue-700 dark:group-hover:text-blue-300 transition-colors">
+                  Security Info
                 </h3>
-                <p className="text-xs text-gray-600 dark:text-gray-400">Injection test vectors</p>
+                <p className="text-xs text-gray-600 dark:text-gray-400">Prompt injection details</p>
               </div>
             </div>
             <div className="p-1 rounded-lg bg-white/50 dark:bg-gray-700/50 group-hover:bg-white dark:group-hover:bg-gray-600 transition-all duration-300">
-              {expandedSections.includes('attacks') ? 
+              {expandedSections.includes('info') ? 
                 <ChevronDown className="h-4 w-4 text-gray-600 dark:text-gray-400" /> : 
                 <ChevronRight className="h-4 w-4 text-gray-600 dark:text-gray-400" />
               }
@@ -88,9 +86,21 @@ export const Sidebar: React.FC<SidebarProps> = ({ onAttackSelect, safeMode, setS
           </button>
         </div>
         
-        {expandedSections.includes('attacks') && (
-          <div className="p-4">
-            <AttackLibrary onAttackSelect={onAttackSelect} />
+        {expandedSections.includes('info') && (
+          <div className="p-4 space-y-3">
+            <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+              Prompt injection attacks attempt to manipulate AI systems by overriding their instructions or extracting sensitive information.
+            </p>
+            <div className="space-y-2 mt-2">
+              <div className="flex items-start space-x-2">
+                <AlertTriangle className="h-4 w-4 text-amber-500 mt-0.5" />
+                <p className="text-xs text-gray-600 dark:text-gray-400">Common techniques include instruction overrides, role-playing, and emotional manipulation.</p>
+              </div>
+              <div className="flex items-start space-x-2">
+                <Shield className="h-4 w-4 text-green-500 mt-0.5" />
+                <p className="text-xs text-gray-600 dark:text-gray-400">Safe Mode provides enhanced protection against sophisticated attacks.</p>
+              </div>
+            </div>
           </div>
         )}
       </Card>

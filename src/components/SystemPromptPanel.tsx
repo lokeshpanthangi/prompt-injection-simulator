@@ -1,23 +1,31 @@
 
 import React from 'react';
-import { Settings, Save, Upload, BarChart3 } from 'lucide-react';
+import { Settings, BarChart3, Shield } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Card } from '@/components/ui/card';
+
+interface BlockedAttack {
+  content: string;
+  timestamp: Date;
+  riskScore: number;
+}
 
 interface SystemPromptPanelProps {
   systemPrompt: string;
   setSystemPrompt: (prompt: string) => void;
   selectedTemplate: string;
   setSelectedTemplate: (template: string) => void;
+  blockedAttacks?: BlockedAttack[];
 }
 
 export const SystemPromptPanel: React.FC<SystemPromptPanelProps> = ({
   systemPrompt,
   setSystemPrompt,
   selectedTemplate,
-  setSelectedTemplate
+  setSelectedTemplate,
+  blockedAttacks = []
 }) => {
   const templates = [
     {
@@ -119,16 +127,6 @@ export const SystemPromptPanel: React.FC<SystemPromptPanelProps> = ({
           <Settings className="h-5 w-5 text-orange-500" />
           <span>System Prompt Configuration</span>
         </h2>
-        <div className="flex space-x-2">
-          <Button variant="outline" size="sm" className="border-orange-200 hover:bg-orange-50 dark:border-gray-600 dark:hover:bg-gray-700">
-            <Save className="h-4 w-4 mr-2" />
-            Save
-          </Button>
-          <Button variant="outline" size="sm" className="border-orange-200 hover:bg-orange-50 dark:border-gray-600 dark:hover:bg-gray-700">
-            <Upload className="h-4 w-4 mr-2" />
-            Load
-          </Button>
-        </div>
       </div>
 
       <div className="space-y-4 flex-1">
@@ -179,6 +177,29 @@ export const SystemPromptPanel: React.FC<SystemPromptPanelProps> = ({
           <p className="text-xs text-gray-600 dark:text-gray-400 mt-2">
             Based on defensive keywords and structure patterns
           </p>
+          
+          <div className="mt-4 border-t border-green-200 dark:border-green-800 pt-3">
+            <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center space-x-2 mb-2">
+              <Shield className="h-4 w-4 text-green-500" />
+              <span>Blocked Attacks</span>
+            </h4>
+            <div className="max-h-32 overflow-y-auto space-y-2 pr-1">
+              {blockedAttacks.length === 0 ? (
+                <p className="text-xs text-gray-500 dark:text-gray-400 italic">No attacks blocked yet</p>
+              ) : (
+                blockedAttacks.map((attack, index) => (
+                  <div key={index} className="bg-white dark:bg-gray-800 rounded-md p-2 border border-green-200 dark:border-green-700 text-xs">
+                    <div className="flex justify-between items-center mb-1">
+                      <span className="font-medium text-gray-700 dark:text-gray-300">Attack Blocked</span>
+                      <span className="text-red-500 dark:text-red-400 font-medium">Risk: {attack.riskScore}%</span>
+                    </div>
+                    <p className="text-gray-600 dark:text-gray-400 truncate">"{attack.content}"</p>
+                    <p className="text-gray-400 dark:text-gray-500 text-[10px] mt-1">{attack.timestamp.toLocaleTimeString()}</p>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
         </Card>
       </div>
     </div>
