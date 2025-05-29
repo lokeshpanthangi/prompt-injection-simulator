@@ -23,7 +23,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ onAttackSelect }) => {
   };
 
   return (
-    <div className="w-full lg:w-80 bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm border-r border-orange-200 dark:border-gray-700 p-4 space-y-4 overflow-hidden">
+    <div className="w-full lg:w-80 bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm border-r border-orange-200 dark:border-gray-700 p-4 space-y-4">
       {/* Safe Mode Toggle */}
       <Card className="p-4 border-orange-200 dark:border-gray-700 bg-gradient-to-r from-orange-50 to-amber-50 dark:from-orange-900/20 dark:to-amber-900/20">
         <div className="flex items-center justify-between">
@@ -45,8 +45,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ onAttackSelect }) => {
       </Card>
 
       {/* Attack Library */}
-      <Card className="border-orange-200 dark:border-gray-700 flex flex-col h-[calc(100vh-400px)]">
-        <div className="p-4 border-b border-orange-100 dark:border-gray-700 flex-shrink-0">
+      <Card className="border-orange-200 dark:border-gray-700">
+        <div className="p-4 border-b border-orange-100 dark:border-gray-700">
           <button
             onClick={() => toggleSection('attacks')}
             className="flex items-center justify-between w-full text-left"
@@ -63,7 +63,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ onAttackSelect }) => {
         </div>
         
         {expandedSections.includes('attacks') && (
-          <div className="p-4 flex-1 overflow-hidden">
+          <div className="p-4">
             <AttackLibrary onAttackSelect={onAttackSelect} />
           </div>
         )}

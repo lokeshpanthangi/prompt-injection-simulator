@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Play, Info } from 'lucide-react';
+import { Copy, Play, Info } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -88,6 +88,10 @@ export const AttackLibrary: React.FC<AttackLibraryProps> = ({ onAttackSelect }) 
     }
   };
 
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text);
+  };
+
   const handleAttackClick = (attack: Attack) => {
     if (onAttackSelect) {
       onAttackSelect(attack.prompt);
@@ -95,46 +99,54 @@ export const AttackLibrary: React.FC<AttackLibraryProps> = ({ onAttackSelect }) 
   };
 
   return (
-    <div className="space-y-3 max-h-96 overflow-y-auto">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       {attacks.map((attack) => (
-        <Card key={attack.id} className="p-3 border-orange-200 dark:border-gray-700 hover:shadow-md transition-all duration-200 hover:scale-102 bg-white dark:bg-gray-800 cursor-pointer">
-          <div className="space-y-2">
+        <Card key={attack.id} className="p-4 border-orange-200 dark:border-gray-700 hover:shadow-md transition-all duration-200 hover:scale-105 bg-white dark:bg-gray-800">
+          <div className="space-y-3">
             <div className="flex items-start justify-between">
               <h3 
-                className="font-semibold text-sm text-gray-800 dark:text-gray-200 hover:text-orange-600 dark:hover:text-orange-400 transition-colors cursor-pointer"
+                className="font-semibold text-gray-800 dark:text-gray-200 cursor-pointer hover:text-orange-600 dark:hover:text-orange-400 transition-colors"
                 onClick={() => handleAttackClick(attack)}
               >
                 {attack.name}
               </h3>
-              <Badge className={`text-xs ${getDifficultyColor(attack.difficulty)}`}>
+              <Badge className={getDifficultyColor(attack.difficulty)}>
                 {attack.difficulty}
               </Badge>
             </div>
             
-            <p className="text-xs text-gray-600 dark:text-gray-400 line-clamp-2">{attack.description}</p>
+            <p className="text-sm text-gray-600 dark:text-gray-400">{attack.description}</p>
             
-            <div className="space-y-1">
+            <div className="space-y-2">
               <div className="flex items-center justify-between text-xs">
                 <span className="text-gray-500 dark:text-gray-400">Success Rate</span>
                 <span className="font-medium dark:text-gray-300">{attack.successRate}%</span>
               </div>
-              <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5">
+              <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
                 <div 
-                  className="bg-gradient-to-r from-red-400 to-red-600 h-1.5 rounded-full transition-all duration-300"
+                  className="bg-gradient-to-r from-red-400 to-red-600 h-2 rounded-full"
                   style={{ width: `${attack.successRate}%` }}
                 ></div>
               </div>
             </div>
             
-            <div className="flex space-x-2 pt-1">
+            <div className="flex space-x-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => copyToClipboard(attack.prompt)}
+                className="flex-1 border-orange-200 hover:bg-orange-50 dark:border-gray-600 dark:hover:bg-gray-700"
+              >
+                <Copy className="h-3 w-3 mr-1" />
+                Copy
+              </Button>
               <Button
                 variant="outline"
                 size="sm"
                 onClick={() => handleAttackClick(attack)}
-                className="flex-1 h-7 text-xs border-orange-200 hover:bg-orange-50 dark:border-gray-600 dark:hover:bg-gray-700"
+                className="border-orange-200 hover:bg-orange-50 dark:border-gray-600 dark:hover:bg-gray-700"
               >
-                <Play className="h-3 w-3 mr-1" />
-                Use Attack
+                <Play className="h-3 w-3" />
               </Button>
             </div>
           </div>

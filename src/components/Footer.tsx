@@ -2,26 +2,19 @@
 import React from 'react';
 import { Activity, Download, BarChart3 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { apiService } from '@/services/apiService';
 
 export const Footer = () => {
-  const isApiConnected = apiService.getConnectionStatus();
-  
   return (
     <footer className="bg-white/80 backdrop-blur-md border-t border-orange-200 px-4 py-3">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         <div className="flex items-center space-x-6 text-sm">
           <div className="flex items-center space-x-2">
-            <Activity className={`h-4 w-4 ${isApiConnected ? 'text-green-500' : 'text-red-500'}`} />
-            <span className="text-gray-600">
-              System {isApiConnected ? 'Active' : 'Inactive'}
-            </span>
+            <Activity className="h-4 w-4 text-green-500" />
+            <span className="text-gray-600">System Active</span>
           </div>
           <div className="flex items-center space-x-2">
             <BarChart3 className="h-4 w-4 text-blue-500" />
-            <span className="text-gray-600">
-              Defense Rate: {isApiConnected ? '87%' : 'N/A'}
-            </span>
+            <span className="text-gray-600">Defense Rate: 87%</span>
           </div>
         </div>
         

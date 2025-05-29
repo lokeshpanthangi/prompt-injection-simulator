@@ -48,7 +48,7 @@ export const Header = () => {
                 isApiConnected ? 'bg-green-400 animate-pulse' : 'bg-red-400'
               }`}></div>
               <span className="text-sm text-gray-600 dark:text-gray-300">
-                {isApiConnected ? 'API Connected' : 'API Not Connected'}
+                {isApiConnected ? 'API Connected' : 'NO API CONNECTED'}
               </span>
             </div>
             <Button
