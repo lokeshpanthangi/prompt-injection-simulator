@@ -21,6 +21,11 @@ export const SystemPromptPanel: React.FC<SystemPromptPanelProps> = ({
 }) => {
   const templates = [
     {
+      id: 'custom',
+      name: 'Custom',
+      prompt: ''
+    },
+    {
       id: 'strict-data',
       name: 'Strict Data Protection Agent',
       prompt: `You are a data protection assistant. You must:
@@ -81,11 +86,27 @@ export const SystemPromptPanel: React.FC<SystemPromptPanelProps> = ({
   };
 
   const calculateStrength = (prompt: string): number => {
+    if (!prompt.trim()) return 0;
+    
     let score = 0;
-    const keywords = ['never', 'refuse', 'ignore', 'must', 'always', 'security', 'privacy', 'policy'];
+    const keywords = ['never', 'refuse', 'ignore', 'must', 'always', 'security', 'privacy', 'policy', 'protect', 'maintain'];
+    const lowercasePrompt = prompt.toLowerCase();
+    
     keywords.forEach(keyword => {
-      if (prompt.toLowerCase().includes(keyword)) score += 10;
+      const matches = (lowercasePrompt.match(new RegExp(keyword, 'g')) || []).length;
+      score += matches * 10;
     });
+    
+    // Additional scoring for structure
+    const sentences = prompt.split(/[.!?]/).filter(s => s.trim().length > 0);
+    score += sentences.length * 5;
+    
+    // Bonus for numbered lists
+    const numberedItems = prompt.match(/^\d+\./gm);
+    if (numberedItems) {
+      score += numberedItems.length * 15;
+    }
+    
     return Math.min(score, 100);
   };
 
@@ -94,16 +115,16 @@ export const SystemPromptPanel: React.FC<SystemPromptPanelProps> = ({
   return (
     <div className="p-6 h-full flex flex-col">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-semibold text-gray-800 flex items-center space-x-2">
+        <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-200 flex items-center space-x-2">
           <Settings className="h-5 w-5 text-orange-500" />
           <span>System Prompt Configuration</span>
         </h2>
         <div className="flex space-x-2">
-          <Button variant="outline" size="sm" className="border-orange-200 hover:bg-orange-50">
+          <Button variant="outline" size="sm" className="border-orange-200 hover:bg-orange-50 dark:border-gray-600 dark:hover:bg-gray-700">
             <Save className="h-4 w-4 mr-2" />
             Save
           </Button>
-          <Button variant="outline" size="sm" className="border-orange-200 hover:bg-orange-50">
+          <Button variant="outline" size="sm" className="border-orange-200 hover:bg-orange-50 dark:border-gray-600 dark:hover:bg-gray-700">
             <Upload className="h-4 w-4 mr-2" />
             Load
           </Button>
@@ -112,16 +133,16 @@ export const SystemPromptPanel: React.FC<SystemPromptPanelProps> = ({
 
       <div className="space-y-4 flex-1">
         <div>
-          <label className="text-sm font-medium text-gray-700 mb-2 block">
+          <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">
             Select Template
           </label>
           <Select value={selectedTemplate} onValueChange={handleTemplateSelect}>
-            <SelectTrigger className="border-orange-200 focus:ring-orange-500">
+            <SelectTrigger className="border-orange-200 focus:ring-orange-500 dark:border-gray-600 dark:bg-gray-800">
               <SelectValue placeholder="Choose a defensive template..." />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="dark:bg-gray-800 dark:border-gray-600">
               {templates.map((template) => (
-                <SelectItem key={template.id} value={template.id}>
+                <SelectItem key={template.id} value={template.id} className="dark:hover:bg-gray-700">
                   {template.name}
                 </SelectItem>
               ))}
@@ -130,32 +151,32 @@ export const SystemPromptPanel: React.FC<SystemPromptPanelProps> = ({
         </div>
 
         <div className="flex-1">
-          <label className="text-sm font-medium text-gray-700 mb-2 block">
+          <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">
             System Prompt
           </label>
           <Textarea
             value={systemPrompt}
             onChange={(e) => setSystemPrompt(e.target.value)}
             placeholder="Enter your system prompt here..."
-            className="h-64 border-orange-200 focus:ring-orange-500 font-mono text-sm"
+            className="h-64 border-orange-200 focus:ring-orange-500 font-mono text-sm dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200"
           />
         </div>
 
-        <Card className="p-4 bg-gradient-to-r from-green-50 to-emerald-50 border-green-200">
+        <Card className="p-4 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border-green-200 dark:border-green-800">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm font-medium text-gray-700 flex items-center space-x-2">
+            <span className="text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center space-x-2">
               <BarChart3 className="h-4 w-4 text-green-500" />
               <span>Defense Strength</span>
             </span>
-            <span className="text-sm font-bold text-green-600">{strength}%</span>
+            <span className="text-sm font-bold text-green-600 dark:text-green-400">{strength}%</span>
           </div>
-          <div className="w-full bg-green-200 rounded-full h-2">
+          <div className="w-full bg-green-200 dark:bg-green-800 rounded-full h-2">
             <div 
               className="bg-green-500 h-2 rounded-full transition-all duration-300"
               style={{ width: `${strength}%` }}
             ></div>
           </div>
-          <p className="text-xs text-gray-600 mt-2">
+          <p className="text-xs text-gray-600 dark:text-gray-400 mt-2">
             Based on defensive keywords and structure patterns
           </p>
         </Card>

@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -97,5 +98,20 @@
 
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@keyframes electric {
+  0%, 100% {
+    filter: drop-shadow(0 0 8px #fbbf24);
+  }
+  25% {
+    filter: drop-shadow(0 0 16px #f59e0b) drop-shadow(0 0 24px #fbbf24);
+  }
+  50% {
+    filter: drop-shadow(0 0 12px #f59e0b);
+  }
+  75% {
+    filter: drop-shadow(0 0 20px #fbbf24) drop-shadow(0 0 8px #f59e0b);
   }
 }
