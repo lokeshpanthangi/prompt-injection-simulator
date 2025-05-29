@@ -17,7 +17,7 @@ The application features a sophisticated attack detection system, customizable s
 
 ```sh
 # Clone the repository
-git clone https://github.com/yourusername/prompt-guardian-simulator.git
+git clone https://github.com/lokeshpanthangi/prompt-injection-simulator.git
 
 # Navigate to the project directory
 cd prompt-guardian-simulator
